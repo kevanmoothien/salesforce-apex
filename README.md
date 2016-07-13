@@ -128,11 +128,71 @@ delete sbm;
 undelete sbm;
 ```
 
-
 ## SOQL queries
+SOQL query will always return the following: 
+- an sobject
+- a list of sobjects 
+- a list of objects
 
-## loop
+### Basic query
+```java
+//Returning only one record
+Contact jane = [SELECT Id, Firstname, Lastname FROM Contact WHERE Id = '0032400000GRVvY'];
 
+//returning a list of record
+list<Account> accountList = [SELECT Id, Name FROM Account];
+```
+### Advanced query 
+```java
+// returning a list of contact with their account name
+list<Contact> contactList = [SELECT Id, 
+                                    Firstname,
+                                    Lastname,
+                                    Account.Name
+                            FROM Contact
+                            WHERE AccountId != null];
+  
+// returning list of account with their children(contacts)
+list<Account> accountList = [SELECT Id, Name,
+                                (SELECT Id, Firstname, Lastname from Contacts)
+                            FROM Account];
+```
+Notice that the child relationship is in plural.
+If a custom object was used here
+- parent relationship: objectName**__r**
+- child relationship: objectName**s__r**
+
+
+## Loops
+``` java
+for(integer i = 0; i < size; i++){
+  // code here
+}
+
+/*Example*/
+list<string> firstnames = new list<string>{'John', 'Jane'};
+list<string> lastnames = new list<string>{'Smith', 'Doe'};
+list<string> names= new list<string>();
+for(integer i = 0; i < firstnames.size(); i++){
+  string name = firstnames[i] + ' ' + lastnames[i];
+  names.add(name);
+}
+
+//or 
+for(type variable: list<type>){
+  //do any operation with variable
+}
+
+/*Examples*/
+integer total = 0;
+list<Account> accountList = [SELECT id, NumberOfEmployees FROM Account];
+for(Account acc: accountList){
+  if (acc.NumberOfEmployees != null){
+    total = total + acc.NumberOfEmployees;
+  }
+}
+
+```
 
 ## Debug Apex code
 ``` java 
