@@ -13,6 +13,13 @@ string lastname = 'Doe';
 string name = firstname + ' ' +  lastname;
 ```
 
+## Debug Apex code
+``` java 
+string name = 'Super test';
+system.debug('### '+name); // ### Super test
+
+```
+
 ## Collection
 A collection in apex is either a "List", "Set" or a "Map"
 
@@ -194,9 +201,39 @@ for(Account acc: accountList){
 
 ```
 
-## Debug Apex code
-``` java 
-string name = 'Super test';
-system.debug('### '+name); // ### Super test
+## Classes and Methods
+``` java
+public class Employee {
+  public string name;
+  public integer age;
+  public datetime arrivedAt;
+  public Employee(){
+  }
+  public void checkIn(){
+    //void just do the action 
+    arrivedAt = System.now();
+  }
+  public boolean shouldRetire(){
+    integer diff = 65 - age;
+    if (diff <= 0){
+      return true;
+    }
+    return false;
+  }
+  public static integer numEmployees(){
+    list<Employee__c> employees = [select id from Employee__c];
+    return employees.size();
+  }
+}
 
+//Creating an instance of employee
+Employee emp = new Employee();
+emp.name = 'john';
+emp.age = 30;
+//call checkIn method for the employee
+emp.checkIn(); // void method do the action only
+retired = emp.shouldRetire(); // non void method should return a value
+
+//Calling static methods
+Employee.numEmployees();
 ```
